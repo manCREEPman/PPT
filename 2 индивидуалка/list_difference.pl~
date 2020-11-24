@@ -7,6 +7,8 @@ writeList([H|T]):- writeln(H), writeList(T).
 readList([], 0):- !.
 readList([H|List], N):- read(H), N1 is N-1, readList(List, N1).
 
+% Предикат, принимающий список и элемент. Если элемент не повторяется в
+% списке, то возвращает true, иначе false
 checkNoRepeating([], _):- !, fail.
 checkNoRepeating([H|T], Elem):- checkNoRepeating([H|T], Elem, 0), !.
 checkNoRepeating(_, _, 2):- !,fail.
@@ -17,9 +19,43 @@ checkNoRepeating([Elem|T], Elem, Count):-
 checkNoRepeating([_|T], Elem, Count):-
     checkNoRepeating(T, Elem, Count).
 
+isElemInList([], _):- !, fail.
+isElemInList([Elem|_], Elem):- !, true.
+isElemInList([_|T], Elem):- isElemInList(T, Elem).
 
-test(A):- A =< 0, !, fail.
-test(_):- !.
+getUniqueElemsList([], ResultList, ResultList):- !.
+getUniqueElemsList([H|T], NewList, ResultList):-
+    isElemInList(NewList, H), !,
+    getUniqueElemsList(T, NewList, ResultList).
+getUniqueElemsList([H|T], NewList, ResultList):-
+    append(NewList, [H], NewList1),
+    getUniqueElemsList(T, NewList1, ResultList).
+
+
+% Предикат, принимающий список и возвращающий список без элементов,
+% которые повторялись
+
+getListWithoutRepeat([], ResultList, ResultList):- !.
+getListWithoutRepeat([H|T], NewList, ResultList):-
+    checkNoRepeating([H|T], H),
+    append(NewList, [H], NewList1), !,
+    getListWithoutRepeat(T, NewList1, ResultList).
+getListWithoutRepeat([H|T], NewList, ResultList):-
+    delete([H|T], H, CutedList),
+    getListWithoutRepeat(CutedList, NewList, ResultList).
+
+
+ind2:- writeln('Size of 1st list'),read(Size1),
+    writeln('Enter 1st list'), readList(List1, Size1),
+    writeln('Size of 2nd list'), read(Size2),
+    writeln('Enter 2nd list'), readList(List2, Size2),
+    getListWithoutRepeat(List1, [], WRList1),
+    getListWithoutRepeat(List2, [], WRList2),
+    append(WRList1, WRList2, PreResultList),
+    getListWithoutRepeat(PreResultList, [], ResultList),
+    writeln(ResultList).
+
+
 
 
 
