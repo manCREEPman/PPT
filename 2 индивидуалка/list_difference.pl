@@ -15,44 +15,26 @@ checkNoRepeating([Elem|T], Elem, Count):-
 checkNoRepeating([_|T], Elem, Count):-
     checkNoRepeating(T, Elem, Count).
 
-% ѕредикат, возвращающий true, если переданный элемент есть в списке,
-% false иначе
-isElemInList([], _):- !, fail.
-isElemInList([Elem|_], Elem):- !, true.
-isElemInList([_|T], Elem):- isElemInList(T, Elem).
-
-% ѕредикат, возвращающий список, где элементы не повтор€ютс€
-getUniqueElemsList(List, ResultList):- getUniqueElemsList(List, [], ResultList).
-getUniqueElemsList([], ResultList, ResultList):- !.
-getUniqueElemsList([H|T], NewList, ResultList):-
-    isElemInList(NewList, H), !,
-    getUniqueElemsList(T, NewList, ResultList).
-getUniqueElemsList([H|T], NewList, ResultList):-
-    append(NewList, [H], NewList1),
-    getUniqueElemsList(T, NewList1, ResultList).
-
-
 % ѕредикат, принимающий список и возвращающий список без элементов,
 % которые повтор€лись
-getListWithoutRepeat(List, ResultList):- getListWithoutRepeat(List, [], ResultList).
+getListWithoutRepeat(List, ResultList):-
+    getListWithoutRepeat(List, [], ResultList).
 getListWithoutRepeat([], ResultList, ResultList):- !.
 getListWithoutRepeat([H|T], NewList, ResultList):-
     checkNoRepeating([H|T], H),
     append(NewList, [H], NewList1), !,
     getListWithoutRepeat(T, NewList1, ResultList).
 getListWithoutRepeat([H|T], NewList, ResultList):-
-    delete([H|T], H, CutedList),
-    getListWithoutRepeat(CutedList, NewList, ResultList).
+    delete([H|T], H, CuttedList),
+    getListWithoutRepeat(CuttedList, NewList, ResultList).
 
 
 ind2:- writeln('Size of 1st list'),read(Size1),
     writeln('Enter 1st list'), readList(List1, Size1),
     writeln('Size of 2nd list'), read(Size2),
     writeln('Enter 2nd list'), readList(List2, Size2),
-    getListWithoutRepeat(List1, WRList1),
-    getListWithoutRepeat(List2, WRList2),
-    append(WRList1, WRList2, PreResultList),
-    getUniqueElemsList(PreResultList, ResultList),
+    append(List1, List2, ListUnion),
+    getListWithoutRepeat(ListUnion, ResultList),
     writeln(ResultList).
 
 
