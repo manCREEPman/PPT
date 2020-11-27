@@ -68,6 +68,10 @@ getWordFromStringPiece(StrPiece, Word, RestStr):-
 			       [], RestStr).
 getWordFromStringPiece([], Word, Word, RestStr, RestStr):- !.
 getWordFromStringPiece([32|_], Word, Word, RestStr, RestStr):- !.
+%getWordFromStringPiece([32], Word, Word, RestStr, RestStr):- !.
+%getWordFromStringPiece([H], CurrentWord, Word, _, RestStr):-
+	%append(CurrentWord, [H], CurrentWord1), !,
+	%getWordFromStringPiece([], CurrentWord1, Word, [], RestStr).
 getWordFromStringPiece([H|[32|Tail]], CurrentWord, Word, _, RestStr):-
 	append(CurrentWord, [H], CurrentWord1), !,
 	getWordFromStringPiece([], CurrentWord1, Word, Tail, RestStr).
