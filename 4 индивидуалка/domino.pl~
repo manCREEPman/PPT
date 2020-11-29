@@ -1,0 +1,63 @@
+% Четыре человека играют в домино. Их фамилии Кузнецов, Токарев,
+% Слесарев и Резчиков. Профессия каждого игрока соответствует фамилии
+% одного из других игроков. Напротив Кузнецова сидит слесарь. Напротив
+% Резчикова сидит резчик. Справа от Слесарева сидит токарь. Кто сидит
+% слева от кузнеца?
+
+
+% Предикат, проверяющий, есть ли элемент в переданном списке
+in_list([El|_],El).
+in_list([_|T],El):-in_list(T,El).
+
+% Предикат, проверяющий, расположен ли элемент1 через один элемент
+% относительно элемента2 в списке размерности 4
+naprotiv(A, B, [A, _, B, _]).
+naprotiv(A, B, [B, _, A, _]).
+naprotiv(A, B, [_, A, _, B]).
+naprotiv(A, B, [_, B, _, A]).
+
+% Дополнен предикат sprava_next. Теперь также учитывается "цикличность"
+% списка из 4 элементов. Предикат проверяет, находится ли элемент1
+% справа относительно элемента2.
+sprava_next(A, B, [B, _, _, A]):- !.
+sprava_next(_,_,[_]):-fail.
+sprava_next(A,B,[A|[B|_]]).
+sprava_next(A,B,[_|List]):-sprava_next(A,B,List).
+
+% Дополнен предикат sleva_next. Теперь также учитывается "цикличность"
+% списка из 4 элементов. Предикат проверяет, находится ли элемент1 слева
+% относительно элемента2.
+sleva_next(A, B, [A, _, _, B]):- !.
+sleva_next(_,_,[_]):-fail.
+sleva_next(A,B,[B|[A|_]]).
+sleva_next(A,B,[_|List]):-sleva_next(A,B,List).
+
+
+ind4:- Domino_players = [_, _, _, _],
+    % Объявляем допустимый множества профессий каждого из игроков
+    KuznecovSpec = [slesar, rezchik, tokar],
+    TokarevSpec = [slesar, rezchik, kuznec],
+    SlesarevSpec = [rezchik, tokar, kuznec],
+    RezchikovSpec = [slesar, tokar, kuznec],
+
+    in_list(KuznecovSpec, KuzProf),
+    in_list(TokarevSpec, TokProf),
+    in_list(SlesarevSpec, SlesProf),
+    in_list(RezchikovSpec, RezProf),
+
+    % Задаём главное условие - игроки есть в списке
+    in_list(Domino_players, [kuznecov, KuzProf]),
+    in_list(Domino_players, [tokarev, TokProf]),
+    in_list(Domino_players, [slesarev, SlesProf]),
+    in_list(Domino_players, [rezchikov, RezProf]),
+
+    % Устанавливаем правила задачи
+    naprotiv([kuznecov, _], [_, slesar], Domino_players),
+    naprotiv([rezchikov, _], [_, rezchik], Domino_players),
+    sprava_next([slesarev, _], [_, tokar], Domino_players),
+
+    % Получаем ответы на вопросы задачи
+    sleva_next([_, kuznec], Who, Domino_players),
+    write("Слева от кузнеца сидит "), writeln(Who),
+    write(Domino_players).
+
