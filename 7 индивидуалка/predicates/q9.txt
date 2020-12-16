@@ -1,0 +1,61 @@
+
+Sven
+0.
+Slark
+1.
+Riki
+1.
+Phantom Lancer
+1.
+Nyx Assassin
+0.
+Morphling
+1.
+Lifestealer
+0.
+Juggernaut
+0.
+Invoker
+0.
+Earthshaker
+0.
+Doom
+0.
+Crystal Maiden
+0.
+Clinkz
+0.
+Beastmaster
+0.
+Antimage
+1.
+Arc Warden
+0.
+Bane
+0.
+Chen
+0.
+Clockwerk
+1.
+Death Prophet
+0.
+Drow Ranger
+0.
+Faceless Void
+1.
+Io
+1.
+Kunkka
+0.
+Lina
+0.
+Naga Siren
+0.
+Pangolier
+1.
+Pudge
+0.
+Outworld Devourer
+0.
+Sniper
+0.
